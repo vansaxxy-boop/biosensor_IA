@@ -76,8 +76,9 @@ function analizar() {
     document.getElementById("resultado").innerText =
       "Resultado: " + resultado;
 
-    let voz = new SpeechSynthesisUtterance("Resultado " + resultado);
-    speechSynthesis.speak(voz);
+    speechSynthesis.speak(
+      new SpeechSynthesisUtterance("Resultado " + resultado)
+    );
   };
 }
 
