@@ -20,6 +20,7 @@
 
 <br><br>
 
+<button onclick="activarVoz()">Activar voz</button>
 <button onclick="analizar()">Analizar</button>
 
 <h2 id="resultado"></h2>
@@ -92,7 +93,63 @@ function analizar() {
 
   image.src = img.src;
 }  
+function analizar() {
 
+  const img = document.getElementById("preview");
+
+  if (!img || !img.src || img.src === "") {
+    alert("Primero cargá una imagen");
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+
+  image.onload = function () {
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    ctx.drawImage(image, 0, 0);
+
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+    let r = 0, g = 0, b = 0;
+    let total = data.length / 4;
+
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+    }
+
+    r = r / total;
+    g = g / total;
+    b = b / total;
+
+    let resultado = "";
+
+    if (r > 120 && b > 120 && r > g) {
+      resultado = "Fresco (rosado-violeta)";
+    } else if (b > r && b > g) {
+      resultado = "Intermedio (azul/celeste)";
+    } else {
+      resultado = "Riesgo (amarillo/verdoso)";
+    }
+
+    document.getElementById("resultado").innerText =
+      "Resultado: " + resultado;
+
+    speechSynthesis.speak(
+      new SpeechSynthesisUtterance("Resultado " + resultado)
+    );
+  };
+
+  image.src = img.src;
+}
 </script>
 
 
