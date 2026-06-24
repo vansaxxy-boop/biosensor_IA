@@ -23,13 +23,11 @@
 <button onclick="analizar()">Analizar</button>
 
 <h2 id="resultado"></h2>
-
 <script>
-
 const foto = document.getElementById("foto");
 const preview = document.getElementById("preview");
 
-foto.addEventListener("change", function() {
+foto.addEventListener("change", function () {
   const archivo = this.files[0];
 
   if (archivo) {
@@ -39,10 +37,9 @@ foto.addEventListener("change", function() {
 });
 
 function analizar() {
+  let color = prompt("Ingrese el color observado: violeta, rosado o amarillo");
 
-  let color = prompt(
-    "Ingrese el color observado: violeta, rosado o amarillo"
-  );
+  if (!color) return;
 
   color = color.toLowerCase();
 
@@ -50,28 +47,21 @@ function analizar() {
 
   if (color === "violeta") {
     resultado = "Fresco";
-  }
-  else if (color === "rosado") {
+  } else if (color === "rosado") {
     resultado = "Intermedio";
-  }
-  else if (color === "amarillo") {
+  } else if (color === "amarillo") {
     resultado = "Riesgo";
-  }
-  else {
+  } else {
     resultado = "Color no reconocido";
   }
 
-  document.getElementById("resultado").innerHTML =
-    "Resultado: " + resultado;
+  document.getElementById("resultado").innerText = "Resultado: " + resultado;
 
-  let voz = new SpeechSynthesisUtterance(
-    "Resultado " + resultado
-  );
-
+  let voz = new SpeechSynthesisUtterance("Resultado " + resultado);
   speechSynthesis.speak(voz);
 }
-
 </script>
+
 
 </body>
 </html>
