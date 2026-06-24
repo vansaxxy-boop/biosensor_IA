@@ -1,10 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Biosensor IA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biosensor Inteligente</title>
 </head>
+
 <body>
-    <h1>Biosensor Inteligente</h1>
-    <p>La aplicación está en construcción.</p>
+
+<h1>Biosensor Inteligente</h1>
+
+<p>Seleccione una imagen del biosensor:</p>
+
+<input type="file" id="foto">
+
+<br><br>
+
+<button onclick="analizar()">Analizar</button>
+
+<h2 id="resultado"></h2>
+
+<script>
+function analizar() {
+  let opciones = [
+    "Fresco",
+    "Intermedio",
+    "Riesgo"
+  ];
+
+  let resultado = opciones[Math.floor(Math.random() * opciones.length)];
+
+  document.getElementById("resultado").innerHTML =
+    "Resultado: " + resultado;
+
+  let voz = new SpeechSynthesisUtterance(
+    "Resultado " + resultado
+  );
+
+  speechSynthesis.speak(voz);
+}
+</script>
+
 </body>
 </html>
