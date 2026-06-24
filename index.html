@@ -12,7 +12,11 @@
 
 <p>Seleccione una imagen del biosensor:</p>
 
-<input type="file" id="foto">
+<input type="file" id="foto" accept="image/*">
+
+<br><br>
+
+<img id="preview" width="300" style="display:none;">
 
 <br><br>
 
@@ -21,14 +25,41 @@
 <h2 id="resultado"></h2>
 
 <script>
-function analizar() {
-  let opciones = [
-    "Fresco",
-    "Intermedio",
-    "Riesgo"
-  ];
 
-  let resultado = opciones[Math.floor(Math.random() * opciones.length)];
+const foto = document.getElementById("foto");
+const preview = document.getElementById("preview");
+
+foto.addEventListener("change", function() {
+  const archivo = this.files[0];
+
+  if (archivo) {
+    preview.src = URL.createObjectURL(archivo);
+    preview.style.display = "block";
+  }
+});
+
+function analizar() {
+
+  let color = prompt(
+    "Ingrese el color observado: violeta, rosado o amarillo"
+  );
+
+  color = color.toLowerCase();
+
+  let resultado = "";
+
+  if (color === "violeta") {
+    resultado = "Fresco";
+  }
+  else if (color === "rosado") {
+    resultado = "Intermedio";
+  }
+  else if (color === "amarillo") {
+    resultado = "Riesgo";
+  }
+  else {
+    resultado = "Color no reconocido";
+  }
 
   document.getElementById("resultado").innerHTML =
     "Resultado: " + resultado;
@@ -39,6 +70,7 @@ function analizar() {
 
   speechSynthesis.speak(voz);
 }
+
 </script>
 
 </body>
