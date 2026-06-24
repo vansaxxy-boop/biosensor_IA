@@ -62,25 +62,27 @@ function analizar() {
     r = r / count;
     g = g / count;
     b = b / count;
+let resultado = "";
 
-    let resultado = "";
-
-    if (b > r && b > g) {
-      resultado = "Fresco (Violeta dominante)";
-    } else if (r > b && g < 150) {
-      resultado = "Intermedio (Rosado dominante)";
-    } else {
-      resultado = "Riesgo (Amarillo o degradado)";
-    }
-
-    document.getElementById("resultado").innerText =
-      "Resultado: " + resultado;
-
-    speechSynthesis.speak(
-      new SpeechSynthesisUtterance("Resultado " + resultado)
-    );
-  };
+// FRESCO: rosado / violeta
+if (r > b && r > g && b > 120) {
+  resultado = "Fresco (rosado-violeta)";
 }
+
+// INTERMEDIO: azul / celeste
+else if (b > r && b > g) {
+  resultado = "Intermedio (azul/celeste)";
+}
+
+// RIESGO: amarillo / verdoso
+else if (r > 150 && g > 150 && b < 120) {
+  resultado = "Riesgo (amarillo/verdoso)";
+}
+
+else {
+  resultado = "No clasificable";
+}
+   
 
 </script>
 
