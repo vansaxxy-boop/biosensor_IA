@@ -36,22 +36,31 @@ foto.addEventListener("change", function () {
   }
 });
 function analizar() {
+
+  const img = document.getElementById("preview");
+
+  if (!img || !img.src || img.src === "") {
+    alert("Primero cargá una imagen");
+    return;
+  }
+
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  const img = new Image();
-  img.src = preview.src;
+  const image = new Image();
+  image.crossOrigin = "anonymous";
 
-  img.onload = function () {
-    canvas.width = img.width;
-    canvas.height = img.height;
+  image.onload = function () {
 
-    ctx.drawImage(img, 0, 0);
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    ctx.drawImage(image, 0, 0);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
     let r = 0, g = 0, b = 0;
-    let count = data.length / 4;
+    let total = data.length / 4;
 
     for (let i = 0; i < data.length; i += 4) {
       r += data[i];
@@ -59,30 +68,30 @@ function analizar() {
       b += data[i + 2];
     }
 
-    r = r / count;
-    g = g / count;
-    b = b / count;
-let resultado = "";
+    r = r / total;
+    g = g / total;
+    b = b / total;
 
-// FRESCO: rosado / violeta
-if (r > b && r > g && b > 120) {
-  resultado = "Fresco (rosado-violeta)";
-}
+    let resultado = "";
 
-// INTERMEDIO: azul / celeste
-else if (b > r && b > g) {
-  resultado = "Intermedio (azul/celeste)";
-}
+    if (r > 120 && b > 120 && r > g) {
+      resultado = "Fresco (rosado-violeta)";
+    } else if (b > r && b > g) {
+      resultado = "Intermedio (azul/celeste)";
+    } else {
+      resultado = "Riesgo (amarillo/verdoso)";
+    }
 
-// RIESGO: amarillo / verdoso
-else if (r > 150 && g > 150 && b < 120) {
-  resultado = "Riesgo (amarillo/verdoso)";
-}
+    document.getElementById("resultado").innerText =
+      "Resultado: " + resultado;
 
-else {
-  resultado = "No clasificable";
-}
-   
+    speechSynthesis.speak(
+      new SpeechSynthesisUtterance("Resultado " + resultado)
+    );
+  };
+
+  image.src = img.src;
+}  
 
 </script>
 
