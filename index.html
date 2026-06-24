@@ -35,31 +35,52 @@ foto.addEventListener("change", function () {
     preview.style.display = "block";
   }
 });
-
 function analizar() {
-  let color = prompt("Ingrese el color observado: violeta, rosado o amarillo");
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
 
-  if (!color) return;
+  const img = new Image();
+  img.src = preview.src;
 
-  color = color.toLowerCase();
+  img.onload = function () {
+    canvas.width = img.width;
+    canvas.height = img.height;
 
-  let resultado = "";
+    ctx.drawImage(img, 0, 0);
 
-  if (color === "violeta") {
-    resultado = "Fresco";
-  } else if (color === "rosado") {
-    resultado = "Intermedio";
-  } else if (color === "amarillo") {
-    resultado = "Riesgo";
-  } else {
-    resultado = "Color no reconocido";
-  }
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-  document.getElementById("resultado").innerText = "Resultado: " + resultado;
+    let r = 0, g = 0, b = 0;
+    let count = data.length / 4;
 
-  let voz = new SpeechSynthesisUtterance("Resultado " + resultado);
-  speechSynthesis.speak(voz);
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+    }
+
+    r = r / count;
+    g = g / count;
+    b = b / count;
+
+    let resultado = "";
+
+    if (b > r && b > g) {
+      resultado = "Fresco (Violeta dominante)";
+    } else if (r > b && g < 150) {
+      resultado = "Intermedio (Rosado dominante)";
+    } else {
+      resultado = "Riesgo (Amarillo o degradado)";
+    }
+
+    document.getElementById("resultado").innerText =
+      "Resultado: " + resultado;
+
+    let voz = new SpeechSynthesisUtterance("Resultado " + resultado);
+    speechSynthesis.speak(voz);
+  };
 }
+
 </script>
 
 
