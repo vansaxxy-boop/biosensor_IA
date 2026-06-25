@@ -1,157 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biosensor Inteligente</title>
+  <meta charset="UTF-8">
+  <title>Biosensor Inteligente</title>
 </head>
 
 <body>
 
-<h1>Biosensor Inteligente</h1>
+  <h1>Biosensor Inteligente</h1>
 
-<p>Seleccione una imagen del biosensor:</p>
+  <button onclick="activarVoz()">Activar voz</button>
+  <br><br>
 
-<input type="file" id="foto" accept="image/*">
+  <input type="file" id="foto" accept="image/*">
+  <br><br>
 
-<br><br>
+  <img id="preview" width="200" style="display:none;">
+  <br><br>
 
-<img id="preview" width="300" style="display:none;">
+  <button onclick="analizar()">Analizar</button>
 
-<br><br>
+  <h2 id="resultado"></h2>
 
-<button onclick="activarVoz()">Activar voz</button>
-<button onclick="analizar()">Analizar</button>
+  <script>
+    const foto = document.getElementById("foto");
+    const preview = document.getElementById("preview");
+    const resultadoBox = document.getElementById("resultado");
 
-<h2 id="resultado"></h2>
-<script>
-const foto = document.getElementById("foto");
-const preview = document.getElementById("preview");
+    foto.addEventListener("change", function () {
+      const archivo = this.files[0];
 
-foto.addEventListener("change", function () {
-  const archivo = this.files[0];
+      if (archivo) {
+        preview.src = URL.createObjectURL(archivo);
+        preview.style.display = "block";
+      }
+    });
 
-  if (archivo) {
-    preview.src = URL.createObjectURL(archivo);
-    preview.style.display = "block";
-  }
-});
-function analizar() {
+    function activarVoz() {
+      const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
 
-  const img = document.getElementById("preview");
+      msg.lang = "es-ES";
+      msg.rate = 1;
+      msg.volume = 1;
 
-  if (!img || !img.src || img.src === "") {
-    alert("Primero cargá una imagen");
-    return;
-  }
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const image = new Image();
-  image.crossOrigin = "anonymous";
-
-  image.onload = function () {
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-
-    ctx.drawImage(image, 0, 0);
-
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-    let r = 0, g = 0, b = 0;
-    let total = data.length / 4;
-
-    for (let i = 0; i < data.length; i += 4) {
-      r += data[i];
-      g += data[i + 1];
-      b += data[i + 2];
+      speechSynthesis.cancel();
+      speechSynthesis.speak(msg);
     }
 
-    r = r / total;
-    g = g / total;
-    b = b / total;
+    function analizar() {
 
-    let resultado = "";
+      if (!preview.src) {
+        alert("Primero cargá una imagen");
+        return;
+      }
 
-    if (r > 120 && b > 120 && r > g) {
-      resultado = "Fresco (rosado-violeta)";
-    } else if (b > r && b > g) {
-      resultado = "Intermedio (azul/celeste)";
-    } else {
-      resultado = "Riesgo (amarillo/verdoso)";
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+
+      img.onload = function () {
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+        let r = 0, g = 0, b = 0;
+        let total = data.length / 4;
+
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i];
+          g += data[i + 1];
+          b += data[i + 2];
+        }
+
+        r = r / total;
+        g = g / total;
+        b = b / total;
+
+        let resultado = "";
+
+        // 🟣 FRESCO (rosado-violeta)
+        if (r > 120 && b > 120 && r > g) {
+          resultado = "Fresco (rosado-violeta)";
+        }
+
+        // 🔵 INTERMEDIO (azul/celeste)
+        else if (b > r && b > g) {
+          resultado = "Intermedio (azul/celeste)";
+        }
+
+        // 🟡 RIESGO (amarillo/verdoso)
+        else {
+          resultado = "Riesgo (amarillo/verdoso)";
+        }
+
+        resultadoBox.innerText = "Resultado: " + resultado;
+
+        speechSynthesis.speak(
+          new SpeechSynthesisUtterance("Resultado " + resultado)
+        );
+      };
+
+      img.src = preview.src;
     }
-
-    document.getElementById("resultado").innerText =
-      "Resultado: " + resultado;
-
-    speechSynthesis.speak(
-      new SpeechSynthesisUtterance("Resultado " + resultado)
-    );
-  };
-
-  image.src = img.src;
-}  
-function analizar() {
-
-  const img = document.getElementById("preview");
-
-  if (!img || !img.src || img.src === "") {
-    alert("Primero cargá una imagen");
-    return;
-  }
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const image = new Image();
-  image.crossOrigin = "anonymous";
-
-  image.onload = function () {
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-
-    ctx.drawImage(image, 0, 0);
-
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-    let r = 0, g = 0, b = 0;
-    let total = data.length / 4;
-
-    for (let i = 0; i < data.length; i += 4) {
-      r += data[i];
-      g += data[i + 1];
-      b += data[i + 2];
-    }
-
-    r = r / total;
-    g = g / total;
-    b = b / total;
-
-    let resultado = "";
-
-    if (r > 120 && b > 120 && r > g) {
-      resultado = "Fresco (rosado-violeta)";
-    } else if (b > r && b > g) {
-      resultado = "Intermedio (azul/celeste)";
-    } else {
-      resultado = "Riesgo (amarillo/verdoso)";
-    }
-
-    document.getElementById("resultado").innerText =
-      "Resultado: " + resultado;
-
-    speechSynthesis.speak(
-      new SpeechSynthesisUtterance("Resultado " + resultado)
-    );
-  };
-
-  image.src = img.src;
-}
-</script>
-
+  </script>
 
 </body>
 </html>
