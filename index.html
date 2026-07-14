@@ -7,20 +7,27 @@
 
 <body>
 
-  <h1>Biosensor Inteligente</h1>
+ </button>
 
-  <button onclick="activarVoz()">Activar voz</button>
-  <br><br>
+<br>
 
-  <input type="file" id="foto" accept="image/*">
-  <br><br>
+<input type="file" id="foto" accept="image/*">
 
-  <img id="preview" width="200" style="display:none;">
-  <br><br>
+<br>
 
-  <button onclick="analizar()">Analizar</button>
+<img id="preview">
 
-  <h2 id="resultado"></h2>
+<br>
+
+<button id="analizarBtn" onclick="analizar()">
+
+🔬 ANALIZAR BIOSENSOR
+
+</button>
+
+<h2 id="resultado"></h2>
+
+</div>
 
   <script>
     const foto = document.getElementById("foto");
@@ -35,16 +42,38 @@
         preview.style.display = "block";
       }
     });
+function hablar(texto){
 
-    function activarVoz() {
-      const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
+    speechSynthesis.cancel();
 
-      msg.lang = "es-ES";
-      msg.rate = 1;
-      msg.volume = 1;
+    const msg = new SpeechSynthesisUtterance(texto);
 
-      speechSynthesis.cancel();
-      speechSynthesis.speak(msg);
+    const voces = speechSynthesis.getVoices();
+
+    let vozElegida =
+        voces.find(v=>v.lang.startsWith("es") &&
+        v.name.toLowerCase().includes("female")) ||
+
+        voces.find(v=>v.lang.startsWith("es"));
+
+    if(vozElegida){
+        msg.voice=vozElegida;
+    }
+
+    msg.lang="es-AR";
+    msg.rate=1;
+    msg.pitch=1;
+
+    speechSynthesis.speak(msg);
+
+}
+
+function activarVoz(){
+
+hablar("Bienvenido a Biosensor IA. Sistema inteligente para la detección de frescura de alimentos. Presione el botón comenzar análisis para iniciar.");
+
+}
+    
     }
 
     function analizar() {
@@ -97,12 +126,49 @@
         else {
           resultado = "Riesgo (amarillo/verdoso)";
         }
+let color="";
+let mensaje="";
+let voz="";
 
-        resultadoBox.innerText = "Resultado: " + resultado;
+if(resultado.includes("Fresco")){
 
-        speechSynthesis.speak(
-          new SpeechSynthesisUtterance("Resultado " + resultado)
-        );
+color="#9C27B0";
+
+mensaje="🟣 ALIMENTO FRESCO<br><br>Color detectado: Violáceo / Rosáceo<br><br>Se recomienda conservar entre 0 y 4 grados Celsius.";
+
+voz="Análisis finalizado. El biosensor indica que el alimento se encuentra fresco. Se recomienda conservarlo refrigerado entre cero y cuatro grados Celsius.";
+
+}
+
+else if(resultado.includes("Intermedio")){
+
+color="#2196F3";
+
+mensaje="🔵 ESTADO INTERMEDIO<br><br>Color detectado: Azulado<br><br>Consumir dentro de las próximas veinticuatro horas.";
+
+voz="El biosensor detecta cambios iniciales en la frescura del alimento. Se recomienda consumirlo dentro de las próximas veinticuatro horas.";
+
+}
+
+else{
+
+color="#8BC34A";
+
+mensaje="🟡 RIESGO SANITARIO<br><br>Color detectado: Amarillo verdoso<br><br>No se recomienda consumir este alimento.";
+
+voz="Atención. El biosensor detecta un estado avanzado de deterioro. Por seguridad alimentaria se recomienda no consumir este alimento.";
+
+}
+
+resultadoBox.style.background=color;
+resultadoBox.style.color="white";
+resultadoBox.style.padding="20px";
+resultadoBox.style.borderRadius="20px";
+resultadoBox.style.fontSize="25px";
+resultadoBox.innerHTML=mensaje;
+
+hablar(voz);
+        
       };
 
       img.src = preview.src;
