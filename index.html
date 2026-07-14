@@ -1,33 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Biosensor Inteligente</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Biosensor IA - AAR</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#5E35B1,#7E57C2,#42A5F5);
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:20px;
+
+}
+
+#contenedor{
+
+background:white;
+
+width:100%;
+
+max-width:750px;
+
+border-radius:30px;
+
+padding:35px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.30);
+
+text-align:center;
+
+}
+
+.logo{
+
+width:150px;
+
+height:150px;
+
+margin:auto;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#8E24AA,#42A5F5,#9CCC65);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:58px;
+
+font-weight:bold;
+
+color:white;
+
+box-shadow:0 0 25px rgba(0,0,0,.25);
+
+}
+
+h1{
+
+margin-top:20px;
+
+font-size:42px;
+
+color:#512DA8;
+
+}
+
+.subtitulo{
+
+margin-top:10px;
+
+font-size:21px;
+
+color:#444;
+
+}
+
+.memoria{
+
+margin-top:18px;
+
+font-size:20px;
+
+font-style:italic;
+
+color:#666;
+
+}
+
+.frase{
+
+margin-top:12px;
+
+font-size:18px;
+
+color:#444;
+
+margin-bottom:30px;
+
+}
+
+button{
+
+width:100%;
+
+padding:20px;
+
+margin-top:15px;
+
+font-size:24px;
+
+border:none;
+
+border-radius:18px;
+
+cursor:pointer;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:scale(1.03);
+
+}
+
+#btnVoz{
+
+background:#29B6F6;
+
+color:white;
+
+}
+
+#btnAnalizar{
+
+background:#43A047;
+
+color:white;
+
+}
+
+input[type=file]{
+
+margin-top:25px;
+
+font-size:20px;
+
+width:100%;
+
+}
+
+#preview{
+
+margin-top:25px;
+
+max-width:100%;
+
+border-radius:20px;
+
+display:none;
+
+border:5px solid #DDD;
+
+}
+
+#resultado{
+
+margin-top:25px;
+
+padding:20px;
+
+font-size:28px;
+
+font-weight:bold;
+
+border-radius:20px;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
- </button>
+  <h1>Biosensor Inteligente</h1>
 
-<br>
+  <button onclick="activarVoz()">Activar voz</button>
+  <br><br>
 
-<input type="file" id="foto" accept="image/*">
+  <input type="file" id="foto" accept="image/*">
+  <br><br>
 
-<br>
+  <img id="preview" width="200" style="display:none;">
+  <br><br>
 
-<img id="preview">
+  <button onclick="analizar()">Analizar</button>
 
-<br>
-
-<button id="analizarBtn" onclick="analizar()">
-
-🔬 ANALIZAR BIOSENSOR
-
-</button>
-
-<h2 id="resultado"></h2>
-
-</div>
+  <h2 id="resultado"></h2>
 
   <script>
     const foto = document.getElementById("foto");
@@ -42,38 +237,16 @@
         preview.style.display = "block";
       }
     });
-function hablar(texto){
 
-    speechSynthesis.cancel();
+    function activarVoz() {
+      const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
 
-    const msg = new SpeechSynthesisUtterance(texto);
+      msg.lang = "es-ES";
+      msg.rate = 1;
+      msg.volume = 1;
 
-    const voces = speechSynthesis.getVoices();
-
-    let vozElegida =
-        voces.find(v=>v.lang.startsWith("es") &&
-        v.name.toLowerCase().includes("female")) ||
-
-        voces.find(v=>v.lang.startsWith("es"));
-
-    if(vozElegida){
-        msg.voice=vozElegida;
-    }
-
-    msg.lang="es-AR";
-    msg.rate=1;
-    msg.pitch=1;
-
-    speechSynthesis.speak(msg);
-
-}
-
-function activarVoz(){
-
-hablar("Bienvenido a Biosensor IA. Sistema inteligente para la detección de frescura de alimentos. Presione el botón comenzar análisis para iniciar.");
-
-}
-    
+      speechSynthesis.cancel();
+      speechSynthesis.speak(msg);
     }
 
     function analizar() {
@@ -126,49 +299,12 @@ hablar("Bienvenido a Biosensor IA. Sistema inteligente para la detección de fre
         else {
           resultado = "Riesgo (amarillo/verdoso)";
         }
-let color="";
-let mensaje="";
-let voz="";
 
-if(resultado.includes("Fresco")){
+        resultadoBox.innerText = "Resultado: " + resultado;
 
-color="#9C27B0";
-
-mensaje="🟣 ALIMENTO FRESCO<br><br>Color detectado: Violáceo / Rosáceo<br><br>Se recomienda conservar entre 0 y 4 grados Celsius.";
-
-voz="Análisis finalizado. El biosensor indica que el alimento se encuentra fresco. Se recomienda conservarlo refrigerado entre cero y cuatro grados Celsius.";
-
-}
-
-else if(resultado.includes("Intermedio")){
-
-color="#2196F3";
-
-mensaje="🔵 ESTADO INTERMEDIO<br><br>Color detectado: Azulado<br><br>Consumir dentro de las próximas veinticuatro horas.";
-
-voz="El biosensor detecta cambios iniciales en la frescura del alimento. Se recomienda consumirlo dentro de las próximas veinticuatro horas.";
-
-}
-
-else{
-
-color="#8BC34A";
-
-mensaje="🟡 RIESGO SANITARIO<br><br>Color detectado: Amarillo verdoso<br><br>No se recomienda consumir este alimento.";
-
-voz="Atención. El biosensor detecta un estado avanzado de deterioro. Por seguridad alimentaria se recomienda no consumir este alimento.";
-
-}
-
-resultadoBox.style.background=color;
-resultadoBox.style.color="white";
-resultadoBox.style.padding="20px";
-resultadoBox.style.borderRadius="20px";
-resultadoBox.style.fontSize="25px";
-resultadoBox.innerHTML=mensaje;
-
-hablar(voz);
-        
+        speechSynthesis.speak(
+          new SpeechSynthesisUtterance("Resultado " + resultado)
+        );
       };
 
       img.src = preview.src;
