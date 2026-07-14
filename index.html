@@ -208,21 +208,50 @@ border-radius:20px;
 </head>
 
 <body>
+<div id="contenedor">
 
-  <h1>Biosensor Inteligente</h1>
+<div class="logo">
+AAR
+</div>
 
-  <button onclick="activarVoz()">Activar voz</button>
-  <br><br>
+<h1>BIOSENSOR IA</h1>
 
-  <input type="file" id="foto" accept="image/*">
-  <br><br>
+<div class="subtitulo">
+Sistema Inteligente para la Detección de Frescura de Alimentos
+</div>
 
-  <img id="preview" width="200" style="display:none;">
-  <br><br>
+<div class="memoria">
+En memoria de AAR
+</div>
 
-  <button onclick="analizar()">Analizar</button>
+<div class="frase">
+La ciencia al servicio de la prevención y la vida.
+</div>
 
-  <h2 id="resultado"></h2>
+<input
+type="file"
+id="foto"
+accept="image/*"
+capture="environment">
+
+<br><br>
+
+<img id="preview">
+
+<br><br>
+
+<button id="btnVoz" onclick="activarVoz()">
+🎤 ACTIVAR ASISTENTE DE VOZ
+</button>
+
+<button id="btnAnalizar" onclick="analizar()">
+🔬 ANALIZAR BIOSENSOR
+</button>
+
+<h2 id="resultado"></h2>
+
+</div>
+  
 
   <script>
     const foto = document.getElementById("foto");
