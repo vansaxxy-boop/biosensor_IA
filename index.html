@@ -165,7 +165,38 @@ color:white;
 
 }
 
-input[type=file]{
+<div class="logo">
+AAR
+</div>
+
+<h1>BIOSENSOR IA</h1>
+
+<div style="font-size:22px;
+font-weight:bold;
+color:#512DA8;
+margin-top:10px;">
+
+Sistema Inteligente para la
+Detección de Frescura de Alimentos
+
+</div>
+
+<div style="margin-top:20px;
+font-size:18px;
+color:#555;">
+
+"La ciencia al servicio de la prevención y la vida"
+
+</div>
+
+<button id="inicio"
+style="background:#673AB7;
+color:white;
+margin-top:30px;">
+
+🧪 COMENZAR ANÁLISIS
+
+</button>
 
 margin-top:25px;
 
@@ -234,7 +265,7 @@ color:#555;">
 
 </div>
 
-<button id="inicio"
+<button id="inicio" onclick="mostrarControles()">
 style="background:#673AB7;
 color:white;
 margin-top:30px;">
@@ -263,15 +294,15 @@ capture="environment">
 
 <br><br>
 
-<img id="preview">
+<input type="file" id="foto" accept="image/*" capture="environment" style="display:none;">
 
 <br><br>
 
-<button id="btnVoz" onclick="activarVoz()">
+<button id="btnVoz" onclick="activarVoz()" style="display:none;">
 🎤 ACTIVAR ASISTENTE DE VOZ
 </button>
 
-<button id="btnAnalizar" onclick="analizar()">
+<button id="btnAnalizar" onclick="analizar()" style="display:none;">
 🔬 ANALIZAR BIOSENSOR
 </button>
 
@@ -294,7 +325,17 @@ capture="environment">
       }
     });
 
-    function activarVoz() {
+    function activfunction mostrarControles(){
+
+document.getElementById("inicio").style.display="none";
+
+document.getElementById("foto").style.display="block";
+
+document.getElementById("btnVoz").style.display="block";
+
+document.getElementById("btnAnalizar").style.display="block";
+
+}arVoz() {
       const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
 
       msg.lang = "es-ES";
