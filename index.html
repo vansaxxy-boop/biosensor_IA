@@ -1,287 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>AAR BIOSENSOR IA</title>
-
-<style>
-
-body{
-
-margin:0;
-
-font-family:Arial,Helvetica,sans-serif;
-
-background:linear-gradient(135deg,#5E35B1,#42A5F5);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-min-height:100vh;
-
-}
-
-#contenedor{
-
-width:90%;
-
-max-width:650px;
-
-background:white;
-
-padding:30px;
-
-border-radius:25px;
-
-text-align:center;
-
-box-shadow:0 10px 30px rgba(0,0,0,.30);
-
-}
-
-.logo{
-
-width:120px;
-
-height:120px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:#5E35B1;
-
-color:white;
-
-font-size:42px;
-
-font-weight:bold;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-}
-
-h1{
-
-color:#5E35B1;
-
-margin-top:20px;
-
-}
-
-.subtitulo{
-
-font-size:20px;
-
-margin-top:10px;
-
-color:#444;
-
-}
-
-.memoria{
-
-font-size:18px;
-
-margin-top:20px;
-
-font-weight:bold;
-
-color:#5E35B1;
-
-}
-
-.frase{
-
-margin-top:10px;
-
-font-style:italic;
-
-color:#666;
-
-}
-
-button,label{
-
-display:block;
-
-width:100%;
-
-margin-top:20px;
-
-padding:18px;
-
-font-size:22px;
-
-font-weight:bold;
-
-border:none;
-
-border-radius:15px;
-
-cursor:pointer;
-
-color:white;
-
-}
-
-#inicio{background:#5E35B1;}
-
-#btnFoto{background:#FB8C00;display:none;}
-
-#btnVoz{background:#1976D2;display:none;}
-
-#btnAnalizar{background:#43A047;display:none;}
-
-#foto{display:none;}
-
-#preview{
-
-display:none;
-
-width:100%;
-
-margin-top:20px;
-
-border-radius:20px;
-
-}
-
-#resultado{
-
-display:none;
-
-margin-top:25px;
-
-padding:20px;
-
-border-radius:20px;
-
-font-size:24px;
-
-font-weight:bold;
-
-color:white;
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <title>Biosensor Inteligente</title>
 </head>
 
-<body><div id="contenedor">
+<body>
 
-<div class="logo">
-AAR
-</div>
+  <h1>Biosensor Inteligente</h1>
 
-<h1>BIOSENSOR IA</h1>
+  <button onclick="activarVoz()">Activar voz</button>
+  <br><br>
 
-<div class="subtitulo">
-Sistema Inteligente para la Detección de Frescura de Alimentos
-</div>
+  <input type="file" id="foto" accept="image/*">
+  <br><br>
 
-<div class="memoria">
-<strong>AAR</strong><br>
-Análisis • Alerta • Recomendación
-</div>
+  <img id="preview" width="200" style="display:none;">
+  <br><br>
 
-<div class="frase">
-Tecnología e inteligencia artificial para una alimentación más segura.
-</div>
+  <button onclick="analizar()">Analizar</button>
 
-<button id="inicio" onclick="mostrarControles()">
-🧪 COMENZAR ANÁLISIS
-</button>
+  <h2 id="resultado"></h2>
 
-<label id="btnFoto" for="foto">
-📷 CARGAR FOTOGRAFÍA DEL BIOSENSOR
-</label>
+  <script>
+    const foto = document.getElementById("foto");
+    const preview = document.getElementById("preview");
+    const resultadoBox = document.getElementById("resultado");
 
-<input
-type="file"
-id="foto"
-accept="image/*"
-capture="environment">
+    foto.addEventListener("change", function () {
+      const archivo = this.files[0];
 
-<img id="preview">
+      if (archivo) {
+        preview.src = URL.createObjectURL(archivo);
+        preview.style.display = "block";
+      }
+    });
 
-<button id="btnVoz" onclick="activarVoz()">
-🎤 ACTIVAR ASISTENTE DE VOZ
-</button>
+    function activarVoz() {
+      const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
 
-<button id="btnAnalizar" onclick="analizar()">
-🔬 ANALIZAR BIOSENSOR
-</button>
+      msg.lang = "es-ES";
+      msg.rate = 1;
+      msg.volume = 1;
 
-<h2 id="resultado"></h2>
+      speechSynthesis.cancel();
+      speechSynthesis.speak(msg);
+    }
 
-</div>
+    function analizar() {
 
-<script>const foto=document.getElementById("foto");
-const preview=document.getElementById("preview");
-const resultadoBox=document.getElementById("resultado");
+      if (!preview.src) {
+        alert("Primero cargá una imagen");
+        return;
+      }
 
-function mostrarControles(){
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-document.getElementById("inicio").style.display="none";
-document.getElementById("btnFoto").style.display="block";
-document.getElementById("btnVoz").style.display="block";
-document.getElementById("btnAnalizar").style.display="block";
+      const img = new Image();
 
-}
+      img.onload = function () {
 
-foto.addEventListener("change",function(){
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-const archivo=this.files[0];
+        ctx.drawImage(img, 0, 0);
 
-if(archivo){
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-preview.src=URL.createObjectURL(archivo);
-preview.style.display="block";
+        let r = 0, g = 0, b = 0;
+        let total = data.length / 4;
 
-}
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i];
+          g += data[i + 1];
+          b += data[i + 2];
+        }
 
-});
+        r = r / total;
+        g = g / total;
+        b = b / total;
 
-function hablar(texto){
+        let resultado = "";
 
-speechSynthesis.cancel();
+        // 🟣 FRESCO (rosado-violeta)
+        if (r > 120 && b > 120 && r > g) {
+          resultado = "Fresco (rosado-violeta)";
+        }
 
-const msg=new SpeechSynthesisUtterance(texto);
+        // 🔵 INTERMEDIO (azul/celeste)
+        else if (b > r && b > g) {
+          resultado = "Intermedio (azul/celeste)";
+        }
 
-msg.lang="es-AR";
-msg.rate=1;
-msg.pitch=1;
+        // 🟡 RIESGO (amarillo/verdoso)
+        else {
+          resultado = "Riesgo (amarillo/verdoso)";
+        }
 
-const voces=speechSynthesis.getVoices();
+        resultadoBox.innerText = "Resultado: " + resultado;
 
-const voz=voces.find(v=>v.lang.startsWith("es"));
+        speechSynthesis.speak(
+          new SpeechSynthesisUtterance("Resultado " + resultado)
+        );
+      };
 
-if(voz){
+      img.src = preview.src;
+    }
+  </script>
 
-msg.voice=voz;
+</body>
+</html>
 
-}
-
-speechSynthesis.speak(msg);
-
-}
-
-function activarVoz(){
-
-hablar("Bienvenido a A A R Biosensor I A. Sistema inteligente para el análisis, alerta y recomendación sobre la frescura de alimentos.");
-
-}
