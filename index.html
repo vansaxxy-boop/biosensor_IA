@@ -17,228 +17,6 @@ font-family:Arial,Helvetica,sans-serif;
 
 body{
 
-background:linear-gradient(135deg,#5E35B1,#7E57C2,#42A5F5);
-
-min-height:100vh;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-padding:20px;
-
-}
-
-#contenedor{
-
-background:white;
-
-width:100%;
-
-max-width:750px;
-
-border-radius:30px;
-
-padding:35px;
-
-box-shadow:0 15px 40px rgba(0,0,0,.30);
-
-text-align:center;
-
-}
-
-.logo{
-
-width:150px;
-
-height:150px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#8E24AA,#42A5F5,#9CCC65);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:58px;
-
-font-weight:bold;
-
-color:white;
-
-box-shadow:0 0 25px rgba(0,0,0,.25);
-
-}
-
-h1{
-
-margin-top:20px;
-
-font-size:42px;
-
-color:#512DA8;
-
-}
-
-.subtitulo{
-
-margin-top:10px;
-
-font-size:21px;
-
-color:#444;
-
-}
-
-.memoria{
-
-margin-top:18px;
-
-font-size:20px;
-
-font-style:italic;
-
-color:#666;
-
-}
-
-.frase{
-
-margin-top:12px;
-
-font-size:18px;
-
-color:#444;
-
-margin-bottom:30px;
-
-}
-
-button{
-
-width:100%;
-
-padding:20px;
-
-margin-top:15px;
-
-font-size:24px;
-
-border:none;
-
-border-radius:18px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:scale(1.03);
-
-}
-
-#btnVoz{
-
-background:#29B6F6;
-
-color:white;
-
-}
-
-#btnAnalizar{
-
-background:#43A047;
-
-color:white;
-
-}
-
-<div class="logo">
-AAR
-</div>
-
-<h1>BIOSENSOR IA</h1>
-
-<div style="font-size:22px;
-font-weight:bold;
-color:#512DA8;
-margin-top:10px;">
-
-Sistema Inteligente para la
-Detección de Frescura de Alimentos
-
-</div>
-
-<div style="margin-top:20px;
-font-size:18px;
-color:#555;">
-
-"La ciencia al servicio de la prevención y la vida"
-
-</div>
-
-<button id="inicio"
-style="background:#673AB7;
-color:white;
-margin-top:30px;">
-
-🧪 COMENZAR ANÁLISIS
-
-</button>
-
-margin-top:25px;
-
-font-size:20px;
-
-width:100%;
-
-}
-
-#preview{
-
-margin-top:25px;
-
-max-width:100%;
-
-border-radius:20px;
-
-display:none;
-
-border:5px solid #DDD;
-
-}
-
-#resultado{
-
-margin-top:25px;
-
-padding:20px;
-
-font-size:28px;
-
-font-weight:bold;
-
-border-radius:20px;
-
-}
-
-</style>
-
-</head>
-
-<body>
 <div id="contenedor">
 
 <div class="logo">
@@ -247,53 +25,39 @@ AAR
 
 <h1>BIOSENSOR IA</h1>
 
-<div style="font-size:22px;
-font-weight:bold;
-color:#512DA8;
-margin-top:10px;">
+<div class="subtitulo">
 
-Sistema Inteligente para la
-Detección de Frescura de Alimentos
+Sistema Inteligente para la Detección de Frescura de Alimentos
 
 </div>
 
-<div style="margin-top:20px;
-font-size:18px;
-color:#555;">
+<div class="memoria">
 
-"La ciencia al servicio de la prevención y la vida"
+AAR
+
+<br>
+
+Análisis • Alerta • Recomendación
+
+</div>
+
+<div class="frase">
+
+La ciencia al servicio de la prevención y la vida.
 
 </div>
 
 <button id="inicio" onclick="mostrarControles()">
-style="background:#673AB7;
-color:white;
-margin-top:30px;">
 
 🧪 COMENZAR ANÁLISIS
 
 </button>
 
-<div class="subtitulo">
-Sistema Inteligente para la Detección de Frescura de Alimentos
-</div>
+<label id="btnFoto" for="foto" style="display:none;">
 
-<div class="memoria">
-<strong>AAR</strong><br>
-Análisis • Alerta • Recomendación
-</div>
+📷 CARGAR FOTOGRAFÍA DEL BIOSENSOR
 
-<div class="frase">
-La ciencia al servicio de la prevención y la vida.
-</div>
-
-<input
-type="file"
-id="foto"
-accept="image/*"
-capture="environment">
-
-<br><br>
+</label>
 
 <input
 type="file"
@@ -302,19 +66,24 @@ accept="image/*"
 capture="environment"
 style="display:none;">
 
-<label for="foto" id="btnFoto">
+<img id="preview">
 
-📷 CARGAR FOTOGRAFÍA DEL BIOSENSOR
+<button
+id="btnVoz"
+onclick="activarVoz()"
+style="display:none;">
 
-</label>
-<br><br>
-
-<button id="btnVoz" onclick="activarVoz()" style="display:none;">
 🎤 ACTIVAR ASISTENTE DE VOZ
+
 </button>
 
-<button id="btnAnalizar" onclick="analizar()" style="display:none;">
+<button
+id="btnAnalizar"
+onclick="analizar()"
+style="display:none;">
+
 🔬 ANALIZAR BIOSENSOR
+
 </button>
 
 <h2 id="resultado"></h2>
