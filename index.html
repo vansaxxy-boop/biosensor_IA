@@ -3,11 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <title>Biosensor Inteligente</title>
+<style>
+body{
+    background:#F57C00;
+    font-family:Arial, sans-serif;
+    text-align:center;
+    color:white;
+    margin:20px;
+}
+button{
+    width:320px;
+    height:70px;
+    font-size:30px;
+    font-weight:bold;
+    border:none;
+    border-radius:15px;
+    margin:18px;
+    cursor:pointer;
+}
+
+h1{
+    font-size:40px;
+}
+
+
+
+
+input[type="file"]{
+    font-size:20px;
+    margin:15px;
+}
+
+#resultado{
+    font-size:30px;
+    font-weight:bold;
+    margin-top:20px;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>Biosensor Inteligente</h1>
+<div class="logo">
+    <h1>AAR</h1>
+    <h2>BIOSENSOR IA</h2>
+    <p><b>Analizar • Alertar • Recomendar</b></p>
+    <p>La ciencia al servicio de la prevención alimentaria.</p>
+</div>
 
   <button onclick="activarVoz()">Activar voz</button>
   <br><br>
@@ -37,8 +79,7 @@
     });
 
     function activarVoz() {
-      const msg = new SpeechSynthesisUtterance("Sistema de voz activado");
-
+      const msg = new SpeechSynthesisUtterance("Bienvenido a A A R. Biosensor Inteligente. Sistema listo para analizar su biosensor.");
       msg.lang = "es-ES";
       msg.rate = 1;
       msg.volume = 1;
